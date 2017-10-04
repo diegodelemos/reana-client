@@ -23,10 +23,10 @@
 
 import pkg_resources
 
-reana_yaml_file_path = '.reana.yaml'
+reana_yaml_file_path = u'.reana.yaml'
 """REANA specification file location.."""
 
 reana_yaml_schema_file_path = pkg_resources.resource_filename(
         __name__,
-        'schemas/reana_analysis_schema.json')
+        u'schemas/reana_analysis_schema.json')
 """REANA specification schema location."""

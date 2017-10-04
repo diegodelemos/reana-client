@@ -23,11 +23,14 @@
 
 import json
 import logging
-from config import reana_yaml_file_path, reana_yaml_schema_file_path
 
-import yadageschemas
+import jsonref
 import yaml
 from jsonschema import ValidationError, validate
+
+import yadageschemas
+
+from .config import reana_yaml_file_path, reana_yaml_schema_file_path
 
 
 def yadage_load(workflow_file, toplevel='.'):
@@ -37,9 +40,12 @@ def yadage_load(workflow_file, toplevel='.'):
         `yadage` workflow specification.
     :returns: A dictionary which represents the valid `yadage` workflow.
     """
-    return yadageschemas.load(workflow_file, toplevel=toplevel,
-                              schema_name='yadage/workflow-schema',
-                              schemadir=None, validate=True)
+    import ipdb; ipdb.set_trace()
+    res = yadageschemas.load(workflow_file, toplevel=toplevel,
+                             schema_name='yadage/workflow-schema',
+                             schemadir=yadageschemas.schemadir,
+                             validate=True)
+    return res
 
 
 workflow_load = {
