@@ -73,10 +73,35 @@ def cwl_load(workflow_file):
     value = mystdout.getvalue()
     return json.loads(value)
 
+serial_workflow_schema = {
+    "commands": {
+        "type": "array",
+        "title": "Command list.",
+        "items": {
+            "type": "string",
+            "title": "Command to be executed in the shell."
+        }
+    }
+}
+
+def serial_load(workflow_file, specification):
+    """Validate and return REANA serial workflow specification.
+
+    :param workflow_file: A specification file compliant with
+        REANA serial workflow specification.
+    :returns: A dictionary which represents the valid serial workflow.
+    """
+    import ipdb; ipdb.set_trace()
+    if not specification:
+        with open(workflow_file, 'r') as f:
+            specification = json.loads(f.read())
+    validate(specification, serial_workflow_schema)
+    return specification
 
 workflow_load = {
     'yadage': yadage_load,
-    'cwl': cwl_load
+    'cwl': cwl_load,
+    'serial': serial_load,
 }
 """Dictionary to extend with new workflow specification loaders."""
 
