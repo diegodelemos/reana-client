@@ -74,7 +74,6 @@ def workflow(ctx):
     help='Set status information verbosity.')
 @add_access_token_options
 @click.pass_context
-@with_api_client
 def workflow_workflows(ctx, _filter, output_format, access_token,
                        show_all, verbose):
     """List all workflows user has."""
@@ -89,7 +88,8 @@ def workflow_workflows(ctx, _filter, output_format, access_token,
         sys.exit(1)
 
     try:
-        response = ctx.obj.client.get_workflows(access_token)
+        from reana_client.api import get_workflows
+        response = get_workflows(access_token)
         verbose_headers = ['id', 'user']
         headers = ['name', 'run_number', 'created', 'status']
         if verbose:
