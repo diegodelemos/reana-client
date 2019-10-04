@@ -14,7 +14,6 @@ import sys
 import traceback
 
 import click
-
 import tablib
 from reana_client.api.client import (current_rs_api_client, delete_file,
                                      download_file, get_workflow_disk_usage,
@@ -24,7 +23,8 @@ from reana_client.api.utils import get_path_from_operation_id
 from reana_client.cli.utils import (add_access_token_options,
                                     add_workflow_option, filter_data,
                                     parse_parameters)
-from reana_client.config import ERROR_MESSAGES, JSON, URL
+from reana_client.config import (ERROR_MESSAGES, JSON, URL,
+                                 reana_yaml_default_file_path)
 from reana_client.errors import FileDeletionError, FileUploadError
 from reana_client.utils import (get_workflow_root, load_reana_spec,
                                 workflow_uuid_or_name)
@@ -155,10 +155,17 @@ def get_files(ctx, workflow, _filter,
     '--output-directory',
     default=os.getcwd(),
     help='Path to the directory where files will be downloaded.')
+@click.option(
+    '-f',
+    '--file',
+    type=click.Path(exists=True, resolve_path=True),
+    default=reana_yaml_default_file_path,
+    help='REANA specifications file describing the workflow and '
+         'context which REANA should execute.')
 @add_access_token_options
 @click.pass_context
 def download_files(ctx, workflow, filenames,
-                   output_directory, access_token):  # noqa: D301
+                   output_directory, access_token, file):  # noqa: D301
     """Download workspace files.
 
     The `download` command allows to download workspace files. By default, the
@@ -181,8 +188,7 @@ def download_files(ctx, workflow, filenames,
         sys.exit(1)
 
     if not filenames:
-        reana_spec = load_reana_spec(os.path.join(get_workflow_root(),
-                                     'reana.yaml'),
+        reana_spec = load_reana_spec(click.format_filename(file),
                                      False)
         if 'outputs' in reana_spec:
             filenames = reana_spec['outputs'].get('files') or []
