@@ -43,6 +43,7 @@ matrix:
       env: REQUIREMENTS=release EXTRAS=all
 
 before_install:
+  - travis_retry pip uninstall black
   - travis_retry pip install --upgrade pip setuptools py
   - if [ "$TRAVIS_PYTHON_VERSION" == "2.7" ]; then travis_retry pip install requirements-builder==0.3.0 click==7.0; fi
   - travis_retry pip install twine wheel coveralls requirements-builder
